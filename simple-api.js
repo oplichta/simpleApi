@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 let comments = [
   {
@@ -100,4 +100,4 @@ app.post('/comment/:id', (req, res) => {
   res.send('Comment is edited');
 });
 
-app.listen(port, () => console.log(`App listening on port ${port}!`));
+app.listen(process.env.PORT || port, () => console.log(`App listening on port ${port}!`));
