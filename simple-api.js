@@ -11,22 +11,22 @@ let comments = [
     userId: 1,
     text: 'Very cute <3',
     author: 'Marijn Haverbeke',
-    publish_date: '2019-12-14'
+    publish_date: '2019-12-14',
   },
   {
     id: 2,
     userId: 3,
     text: 'I need to get one :) ',
     author: 'Addy Osmani',
-    publish_date: '2020-02-12'
+    publish_date: '2020-02-12',
   },
   {
     id: 3,
     userId: 2,
     text: 'My favorite race! I love it.',
     author: 'Axel Rauschmayer',
-    publish_date: '2020-02-10'
-  }
+    publish_date: '2020-02-10',
+  },
 ];
 
 app.use(cors());
@@ -46,12 +46,26 @@ app.post('/comment', (req, res) => {
 });
 
 app.get('/comment', (req, res) => {
-  res.json(comments);
+  // reading userid from the URL
+  const userid = parseInt(req.query.userid);
+  if (userid !== undefined) {
+    // searching comments for the id
+    for (let comment of comments) {
+      if (comment.userId === userid) {
+        res.json(comment);
+        return;
+      }
+    }
+  } else {
+    res.json(comments);
+  }
+
+  res.status(404).send('Comments not found');
 });
 
 app.get('/comment/:id', (req, res) => {
   // reading id from the URL
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   // searching comments for the id
   for (let comment of comments) {
@@ -70,7 +84,7 @@ app.delete('/comment/:id', (req, res) => {
   const id = req.params.id;
 
   // remove item from the comments array
-  comments = comments.filter(i => {
+  comments = comments.filter((i) => {
     if (i.id !== id) {
       return true;
     }
